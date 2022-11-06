@@ -1,30 +1,25 @@
 import { internetPayment } from './internetPayment.js'
 
-export const somnet = async (req, res) => {
-  const { dailogid, shortcode, mobile, ussd_request, refid } = req.body
 
-  // 1. 1GB No expire = $0.48
-  // 2. 2.5GB No expire = $0.96
-  // 3. 12GB No expire = $4.5
-  // 4. 24HR Unlimited = $0.47
-  // 5. 1 Bil Unlimited = $14.8
 
-  // =========== Start 1GB No expire = $0.48 ======================
-  if (ussd_request === '1' && refid === 'iSR') {
-    return res.send({
+
+const paymentInit = (props) => {
+  const { dailogid, shortcode, mobile, ussd_request, refid } = props.req.body
+  if (ussd_request === props.ussd_request && refid === 'iSR') {
+    return props.res.send({
       dailogid,
       shortcode,
       mobile,
       end_reply: false,
       ussd_state: "continue",
-      refid: 'iSR1',
+      refid: props.refid,
       ussd_response: `Somnet\nGeli numberka data u rabto (6xxx)`
     })
   }
 
   // Payment
-  if (refid === 'iSR1') {
-    res.send({
+  if (refid === props.refid) {
+    props.res.send({
       dailogid,
       shortcode,
       mobile,
@@ -33,8 +28,9 @@ export const somnet = async (req, res) => {
       ussd_response: `Waxyar sug...`
     })
 
+
     internetPayment({
-      lacagta: '0.48',
+      lacagta: props.amount,
       dire: mobile,
       loodire: ussd_request,
       shirkada: 'Hormuud',
@@ -47,5 +43,55 @@ export const somnet = async (req, res) => {
     return null
 
   }
-  // =========== End 1GB No expire = $0.48 ======================
+}
+
+
+export const somnet = async (req, res) => {
+
+  // 1. 1GB No expire = $0.48
+  // 2. 2.5GB No expire = $0.96
+  // 3. 12GB No expire = $4.5
+  // 4. 24HR Unlimited = $0.47
+  // 5. 1 Bil Unlimited = $14.8
+
+  paymentInit({
+    ussd_request: '1',
+    refid: 'iSR1',
+    amount: '0.48',
+    req,
+    res
+  })
+
+  paymentInit({
+    ussd_request: '2',
+    refid: 'iSR2',
+    amount: '0.96',
+    req,
+    res
+  })
+
+  paymentInit({
+    ussd_request: '3',
+    refid: 'iSR3',
+    amount: '4.5',
+    req,
+    res
+  })
+
+  paymentInit({
+    ussd_request: '4',
+    refid: 'iSR4',
+    amount: '0.47',
+    req,
+    res
+  })
+
+  paymentInit({
+    ussd_request: '5',
+    refid: 'iSR5',
+    amount: '14.8',
+    req,
+    res
+  })
+
 }
