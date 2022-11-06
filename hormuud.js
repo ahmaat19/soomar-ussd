@@ -1,4 +1,4 @@
-import XMLHttpRequest from 'xhr2'
+import { internetPayment } from "./internetPayment.js"
 
 export const hormuud = async (req, res) => {
     const { dailogid, shortcode, mobile, ussd_request, refid } = req.body
@@ -24,30 +24,6 @@ export const hormuud = async (req, res) => {
 
     // Payment
     if (refid === 'iHR1') {
-        const paymentInternetRequest = () => {
-            var data = btoa(JSON.stringify({
-                lacagta: '0.47',
-                dire: mobile,
-                loodire: ussd_request,
-                shirkada: 'Hormuud',
-                nooca: 'Anfac Hadal',
-                OfferID: 'NA',
-                usercity: 'mogadisho',
-                SoomarDataDealeryCash: mobile,
-            }))
-
-            const xhttp = new XMLHttpRequest()
-
-            xhttp.onload = (result) => {
-                const status = result?.currentTarget?.responseText
-                console.log("status: ", status)
-            }
-
-            xhttp.open('POST', `https://soomar.so/m/payment/DataPy.php`)
-            xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
-            xhttp.send('data=' + data)
-        }
-
         res.send({
             dailogid,
             shortcode,
@@ -57,7 +33,16 @@ export const hormuud = async (req, res) => {
             ussd_response: `Waxyar sug...`
         })
 
-        paymentInternetRequest()
+        internetPayment({
+            lacagta: '0.47',
+            dire: mobile,
+            loodire: ussd_request,
+            shirkada: 'Hormuud',
+            nooca: 'Anfac Hadal',
+            OfferID: 'NA',
+            usercity: 'mogadisho',
+            SoomarDataDealeryCash: mobile,
+        })
 
         return null
 
