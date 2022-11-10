@@ -35,7 +35,7 @@ const paymentInit = (props) => {
             nooca: 'Anfac Hadal',
             OfferID: 'NA',
             usercity: 'mogadisho',
-            SoomarDataDealeryCash: mobile,
+            SoomarDataDealeryCash: `615941594`,
         })
 
         return null
