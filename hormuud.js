@@ -24,7 +24,7 @@ const paymentInit = (props) => {
             mobile,
             end_reply: true,
             ussd_state: "end",
-            ussd_response: `Waxyar sug...`
+            ussd_response: `BIXI ($${props.amount})`
         })
 
         internetPayment({
